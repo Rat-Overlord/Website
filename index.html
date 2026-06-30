@@ -395,6 +395,50 @@
   footer{text-align:center;padding:2.5rem;color:var(--gray-light);font-size:.8rem;border-top:1px solid rgba(179,160,110,.12)}
   footer a{color:var(--khaki-light)}
 
+  /* SCROLL PROGRESS BAR */
+  #scroll-progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;
+    background:linear-gradient(90deg,var(--khaki-dark),var(--khaki-light));
+    z-index:200;transition:width .1s linear;
+  }
+
+  /* STATS BAND */
+  .stats-band{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+    margin-top:3rem;
+  }
+  .stat{
+    text-align:center;padding:1.6rem 1rem;
+    background:var(--charcoal-soft);border:1px solid rgba(179,160,110,.15);
+    border-radius:12px;transition:transform .3s,border-color .3s;
+  }
+  .stat:hover{transform:translateY(-5px);border-color:rgba(179,160,110,.4)}
+  .stat .num{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--khaki);line-height:1}
+  .stat .label{font-size:.78rem;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-top:.5rem}
+
+  /* SCROLL TO TOP */
+  #to-top{
+    position:fixed;bottom:1.5rem;left:1.5rem;z-index:850;
+    width:46px;height:46px;border-radius:50%;
+    background:var(--charcoal-soft);border:1px solid rgba(179,160,110,.35);
+    color:var(--khaki-light);font-size:1.2rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .3s,transform .3s,background .2s;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  #to-top.show{opacity:1;pointer-events:auto;transform:none}
+  #to-top:hover{background:var(--khaki);color:var(--charcoal)}
+
+  /* active nav link */
+  nav .links a.active{color:var(--khaki-light)}
+  nav .links a.active::after{width:100%}
+
+  @media(max-width:760px){
+    .stats-band{grid-template-columns:repeat(2,1fr)}
+    #to-top{bottom:1rem;left:1rem}
+  }
+
   /* reveal animation */
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
   .reveal.visible{opacity:1;transform:none}
@@ -416,6 +460,8 @@
 </style>
 </head>
 <body>
+
+<div id="scroll-progress"></div>
 
 <!-- INTRO OVERLAY -->
 <div id="intro">
@@ -489,6 +535,11 @@
         <span>Network Admin</span><span>Endpoint Security</span><span>Incident Triage</span>
       </div>
     </div>
+  </div>
+  <div class="stats-band">
+    <div class="stat reveal"><div class="num" data-count="3" data-suffix="+">0</div><div class="label">Years Experience</div></div>
+    <div class="stat reveal"><div class="num" data-count="6">0</div><div class="label">Certifications</div></div>
+    <div class="stat reveal"><div class="num" data-count="50" data-suffix="+">0</div><div class="label">Programs Supported</div></div>
   </div>
 </section>
 
@@ -634,6 +685,9 @@
   &copy; <span id="year"></span> Ronnile Helser &middot; IT &amp; Security
 </footer>
 
+<!-- SCROLL TO TOP -->
+<button id="to-top" aria-label="Back to top">&uarr;</button>
+
 <!-- CHAT: Oliver AI (techy corgi) -->
 <button id="chat-launcher" aria-label="Chat with Oliver AI">
   <span class="pulse"></span>
@@ -718,6 +772,73 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* Scroll progress bar */
+  (function(){
+    var bar = document.getElementById('scroll-progress');
+    if(!bar) return;
+    window.addEventListener('scroll', function(){
+      var h = document.documentElement;
+      var scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+      bar.style.width = scrolled + '%';
+    }, {passive:true});
+  })();
+
+  /* Scroll-to-top button */
+  (function(){
+    var btn = document.getElementById('to-top');
+    if(!btn) return;
+    window.addEventListener('scroll', function(){
+      if(window.scrollY > 600){ btn.classList.add('show'); }
+      else{ btn.classList.remove('show'); }
+    }, {passive:true});
+    btn.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  })();
+
+  /* Active nav link highlighting */
+  (function(){
+    var sections = document.querySelectorAll('section[id]');
+    var navLinks = document.querySelectorAll('nav .links a');
+    if(!sections.length) return;
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var id = e.target.getAttribute('id');
+          navLinks.forEach(function(a){
+            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px'});
+    sections.forEach(function(s){ obs.observe(s); });
+  })();
+
+  /* Animated count-up stats */
+  (function(){
+    var nums = document.querySelectorAll('.stat .num[data-count]');
+    if(!nums.length) return;
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        var el = e.target;
+        obs.unobserve(el);
+        var target = parseInt(el.getAttribute('data-count'), 10);
+        var suffix = el.getAttribute('data-suffix') || '';
+        var dur = 1400, start = null;
+        function step(ts){
+          if(!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3); // ease-out
+          el.textContent = Math.round(eased * target) + suffix;
+          if(p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, {threshold:.5});
+    nums.forEach(function(n){ obs.observe(n); });
+  })();
 
   /* Intro overlay: hold briefly, then fade out and reveal the site */
   (function(){
