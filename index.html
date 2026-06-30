@@ -333,6 +333,9 @@
   .cert-track.autoscroll{
     animation:certscroll 40s linear infinite;
   }
+  .cert-track.autoscroll.paused{
+    animation-play-state:paused;
+  }
   @keyframes certscroll{
     from{transform:translateX(0)}
     to{transform:translateX(-50%)}
@@ -940,10 +943,10 @@
 
     // pause auto-scroll on hover (desktop) without committing to manual yet
     carousel.addEventListener('mouseenter', function(){
-      if(!switched) track.style.animationPlayState = 'paused';
+      if(!switched) track.classList.add('paused');
     });
     carousel.addEventListener('mouseleave', function(){
-      if(!switched) track.style.animationPlayState = '';
+      if(!switched) track.classList.remove('paused');
     });
 
     // pointer drag (mouse + touch + pen via Pointer Events)
