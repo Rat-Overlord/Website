@@ -457,11 +457,10 @@
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
   .reveal.visible{opacity:1;transform:none}
 
-  /* respect reduced-motion preference */
+  /* respect reduced-motion preference (decorative motion only) */
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     .reveal{opacity:1;transform:none;transition:none}
-    .cert-track{animation:none}
     .scroll-cue{animation:none}
     #chat-launcher .pulse{animation:none}
     .intro-bar,.intro-word,.intro-sub{animation-duration:.01s;animation-delay:0s}
@@ -705,7 +704,7 @@
   </div>
 
   <div class="linkedin-badge reveal">
-    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="HORIZONTAL" data-vanity="ronnile-helser" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/ronnile-helser?trk=profile-badge">Ronnile Helser</a></div>
+    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="VERTICAL" data-vanity="ronnile-helser" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/ronnile-helser?trk=profile-badge">Ronnile Helser</a></div>
   </div>
 </section>
 
