@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ronnile Helser — IT &amp; Security</title>
+<meta name="description" content="Ronnile 'Ronnie' Helser — CompTIA-certified IT professional in Columbus, OH. Tier 2 IT Service Analyst and cybersecurity instructor with 3+ years of experience, six certifications, and hands-on home lab projects.">
+<meta name="author" content="Ronnile Helser">
+<meta property="og:title" content="Ronnile Helser — IT &amp; Security">
+<meta property="og:description" content="CompTIA-certified IT professional. Tier 2 IT Service Analyst, cybersecurity instructor, and hands-on home lab builder — Columbus, OH.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ronnilehelsertech.com">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ronnile Helser — IT &amp; Security">
+<meta name="twitter:description" content="CompTIA-certified IT professional. Tier 2 IT Service Analyst, cybersecurity instructor, and hands-on home lab builder — Columbus, OH.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231a1c20'/%3E%3Ctext x='32' y='44' font-family='Segoe UI,Arial,sans-serif' font-size='30' font-weight='700' fill='%23b3a06e' text-anchor='middle'%3ERH%3C/text%3E%3C/svg%3E">
 <style>
   :root{
@@ -19,7 +28,11 @@
     --text-dim:#a8a8a2;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scroll-padding-top:74px}
+  ::selection{background:var(--khaki);color:var(--charcoal)}
+  a:focus-visible,button:focus-visible,input:focus-visible{
+    outline:2px solid var(--khaki);outline-offset:3px;border-radius:4px;
+  }
   body{
     font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
     background:var(--bg);
@@ -444,6 +457,16 @@
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
   .reveal.visible{opacity:1;transform:none}
 
+  /* respect reduced-motion preference */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    .cert-track{animation:none}
+    .scroll-cue{animation:none}
+    #chat-launcher .pulse{animation:none}
+    .intro-bar,.intro-word,.intro-sub{animation-duration:.01s;animation-delay:0s}
+  }
+
   @media(max-width:760px){
     nav{padding:1rem 1.3rem}
     nav .links{
@@ -506,7 +529,7 @@
     <div class="hero-cta reveal">
       <a href="#projects" class="btn btn-primary">View Projects</a>
       <a href="#contact" class="btn btn-ghost">Get in Touch</a>
-      <a href="https://www.linkedin.com/in/ronnile-helser-3b1585251/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn &#8599;</a>
+      <a href="https://www.linkedin.com/in/ronnile-helser" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn &#8599;</a>
     </div>
   </div>
   <div class="scroll-cue">Scroll &darr;</div>
@@ -665,7 +688,7 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-head reveal" style="text-align:left">
+  <div class="section-head reveal" style="display:inline-block;text-align:left">
     <div class="num">06 / CONTACT</div>
     <h2>Let's Connect</h2>
     <div class="line"></div>
@@ -677,12 +700,12 @@
   <div class="copy-note" id="copy-note"></div>
   <div class="contact-actions reveal">
     <a href="mailto:ronnilehelser@gmail.com?subject=Reaching%20out%20from%20your%20portfolio" class="btn btn-primary">Email Me</a>
-    <a href="https://www.linkedin.com/in/ronnile-helser-3b1585251/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn &#8599;</a>
+    <a href="https://www.linkedin.com/in/ronnile-helser" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn &#8599;</a>
     <button class="btn btn-ghost" id="copy-btn">Copy Address</button>
   </div>
 
   <div class="linkedin-badge reveal">
-    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="HORIZONTAL" data-vanity="ronnile-helser-3b1585251" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/ronnile-helser-3b1585251?trk=profile-badge">Ronnile Helser</a></div>
+    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="HORIZONTAL" data-vanity="ronnile-helser" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/ronnile-helser?trk=profile-badge">Ronnile Helser</a></div>
   </div>
 </section>
 
@@ -1010,7 +1033,7 @@
 
     function imgBlock(c){
       if(c.img){
-        return '<img class="cert-img" src="' + c.img + '" alt="' + c.issuer + ' ' + c.cred + ' certificate" data-cred="' + c.cred + '" data-bar="' + c.bar + '">';
+        return '<img class="cert-img" src="' + c.img + '" loading="lazy" alt="' + c.issuer + ' ' + c.cred + ' certificate" data-cred="' + c.cred + '" data-bar="' + c.bar + '">';
       }
       return placeholderHTML(c);
     }
